@@ -18,6 +18,11 @@ module ThemesForRails
       available_themes.map {|theme| File.basename(theme) } 
     end
     
+    def add_themes_helpers_to_sass
+      if ThemesForRails.config.sass_is_available?
+      end
+    end
+
     def add_themes_path_to_sass
       if ThemesForRails.config.sass_is_available?
         each_theme_dir do |dir|
