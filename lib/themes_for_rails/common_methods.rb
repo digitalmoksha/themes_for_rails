@@ -72,11 +72,8 @@ module ThemesForRails
       end
     end
 
-    def name_ext(file_name)
-      ext = File.extname(file_name)
-      name = File.basename(file_name, ext)
-      ext.slice!(0) if ext.length > 0
-      return name, ext
+    def check_add_extension(asset, ext = '.css')
+      asset.end_with?(ext) ? asset : (asset + ext)
     end
 
     def public_theme_path

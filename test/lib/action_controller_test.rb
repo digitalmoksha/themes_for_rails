@@ -107,8 +107,8 @@ module ThemesForRails
       end
 
       should "should store the theme's name" do
-        @controller.theme 'default'
-        assert_equal @controller.theme_name, 'default'
+        @controller.theme 'orange_theme'
+        assert_equal @controller.theme_name, 'orange_theme'
       end
 
       context "when a theme has been set" do
@@ -117,14 +117,22 @@ module ThemesForRails
 
         should "add the theme's view path to the front of the general view paths" do
           antes = @controller.view_paths.size
-          @controller.theme 'default'  
+          ThemesForRails.config.default_theme = ''
+          @controller.theme 'orange_theme'
           assert_equal antes + 1, @controller.view_paths.size
         end
         
+        should "default theme path is added" do
+          antes = @controller.view_paths.size
+          ThemesForRails.config.default_theme = 'default'
+          @controller.theme 'orange_theme'
+          assert_equal antes + 2, @controller.view_paths.size
+        end
+        
         should "have a proper view path" do
-          @controller.theme 'default'
+          @controller.theme 'orange_theme'
           view_path = @controller.view_paths.first
-          theme_view_path = File.expand_path(File.join("test", "dummy_app", "themes", "default", "views"))
+          theme_view_path = File.expand_path(File.join("test", "dummy_app", "themes", "orange_theme", "views"))
           assert_equal view_path.to_s, theme_view_path
         end
 

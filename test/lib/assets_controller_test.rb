@@ -1,8 +1,18 @@
 # encoding: utf-8
 require File.expand_path("test/test_helper.rb")
 
+#--- only way I found to fix a "In order to use #url_for" error
+module ActionController::UrlFor
+  def _routes
+    Rails.application.routes
+  end
+end
+
 module ThemesForRails
+  include Rails.application.routes.url_helpers
   class AssetsControllerTest < ::ActionController::TestCase  
+    
+    
     tests ThemesForRails::AssetsController
     
     should "respond to stylesheets" do
@@ -59,7 +69,7 @@ module ThemesForRails
     end
     
     should "respond with a nested asset" do
-      get 'images', { :theme => 'default', :asset => 'nested/logo.png'}
+      get 'images', { :theme => 'default', :asset => 'nested/nested_logo.png'}
       assert_response :success
       assert_equal 'image/png', @response.content_type
     end
