@@ -3,7 +3,7 @@ module ThemesForRails
   class Config
 
     attr_writer :base_dir, :themes_dir, :assets_dir, :views_dir, :themes_routes_dir
-    attr_accessor :use_sass, :default_theme, :asset_digests_enabled
+    attr_accessor :use_sass, :default_theme, :asset_digests_enabled, :assets_cache_control
     
     include Interpolation
 
@@ -45,6 +45,10 @@ module ThemesForRails
       interpolate(themes_dir)
     end
 
+    def assets_cache_control
+      @assets_cache_control ||= "public, max-age=#{1.hours}"
+    end
+    
     # This is the base themes dir that is used for mapping URL paths.
     # 
     # If you are using the Rails Asset Pipeline, this should be changed to the
@@ -58,10 +62,11 @@ module ThemesForRails
     end
 
     def clear
-      @base_dir   = nil
-      @themes_dir = nil
-      @assets_dir = nil
-      @views_dir  = nil
+      @base_dir             = nil
+      @themes_dir           = nil
+      @assets_dir           = nil
+      @views_dir            = nil
+      @assets_cache_control = nil
     end
 
     def use_sass?
@@ -75,5 +80,5 @@ module ThemesForRails
     def asset_digests_enabled?
       @asset_digests_enabled
     end
-  end  
+  end
 end
