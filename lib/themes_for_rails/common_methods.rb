@@ -40,6 +40,10 @@ module ThemesForRails
 
     # will add the view path for a given theme name
     def add_theme_view_path_for(name)
+      #--- first add the default theme, to handle any view not found in main theme
+      if !ThemesForRails.config.default_theme.blank?
+        self.view_paths.insert 0, ::ActionView::FileSystemResolver.new(theme_view_path_for(ThemesForRails.config.default_theme))
+      end
       self.view_paths.insert 0, ::ActionView::FileSystemResolver.new(theme_view_path_for(name))
     end
 
