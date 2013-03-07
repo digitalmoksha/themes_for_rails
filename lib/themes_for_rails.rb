@@ -37,7 +37,12 @@ module ThemesForRails
     end
 
     def check_asset_pipeline
-      config.asset_digests_enabled ||= Rails.application.config.respond_to?(:assets) && Rails.application.config.assets.digest == true
+      #--- only set if it hasn't already been set - honor what was set by the user
+      if config.asset_digests_enabled.nil?
+        config.asset_digests_enabled = Rails.application.config.respond_to?(:assets) && Rails.application.config.assets.digest == true
+      else
+        config.asset_digests_enabled
+      end
     end
 
     def add_themes_assets_to_asset_pipeline
