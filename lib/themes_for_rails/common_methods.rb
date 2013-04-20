@@ -47,9 +47,24 @@ module ThemesForRails
       self.view_paths.insert 0, ::ActionView::FileSystemResolver.new(theme_view_path_for(name))
     end
 
+    #------------------------------------------------------------------------------
+    # At some point, "digest" support was added.  However, at least with Rails 3.2.13
+    # the call to asset_paths.digest_for() looks up the digest - when passed to
+    # the stylesheet or javascript helpers, sprockets gives an error saying the 
+    # asset (which has a digest already appened on it) is not compiled.  So pass
+    # in the straight asset name, and those helpers lookup the digest and give the 
+    # correct path.
+    # The code removed looked like this:
+      # if ThemesForRails.config.asset_digests_enabled?
+      #   asset_paths.digest_for("#{theme_context}/images/#{asset}") || asset
+      # else
+      #   asset
+      # end
+    
     def digest_for_image(asset, theme_context)
       if ThemesForRails.config.asset_digests_enabled?
-        asset_paths.digest_for("#{theme_context}/images/#{asset}") || asset
+        expanded_asset = "#{theme_context}/images/#{asset}"
+        asset.start_with?('/') ? asset : expanded_asset
       else
         asset
       end
@@ -57,7 +72,8 @@ module ThemesForRails
 
     def digest_for_javascript(asset, theme_context)
       if ThemesForRails.config.asset_digests_enabled?
-        asset_paths.digest_for("#{theme_context}/javascripts/#{asset}") || asset
+        expanded_asset = "#{theme_context}/javascripts/#{asset}"
+        asset.start_with?('/') ? asset : expanded_asset
       else
         asset
       end
@@ -65,8 +81,8 @@ module ThemesForRails
 
     def digest_for_stylesheet(asset, theme_context)
       if ThemesForRails.config.asset_digests_enabled?
-        #Rails.application.config.assets.digests["#{theme_context}/stylesheets/#{asset}"] || asset
-        asset_paths.digest_for("#{theme_context}/stylesheets/#{asset}") || asset
+        expanded_asset = "#{theme_context}/stylesheets/#{asset}"
+        asset.start_with?('/') ? asset : expanded_asset
       else
         asset
       end
