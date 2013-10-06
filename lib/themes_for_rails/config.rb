@@ -2,8 +2,10 @@
 module ThemesForRails
   class Config
 
-    attr_writer :base_dir, :themes_dir, :assets_dir, :views_dir, :themes_routes_dir
-    attr_accessor :use_sass, :default_theme, :asset_digests_enabled, :assets_cache_control
+    attr_writer :base_dir, :themes_dir, :assets_dir, :views_dir, :themes_routes_dir,
+                :themes_config_file, :locales_dir
+    attr_accessor :use_sass, :default_theme, :asset_digests_enabled, :assets_cache_control,
+                  :theme_data
     
     include Interpolation
 
@@ -11,6 +13,7 @@ module ThemesForRails
       @use_sass = true
       @default_theme = 'default'
       @asset_digests_enabled = nil
+      @theme_data = {}
       yield if block_given?
     end
     
@@ -38,6 +41,18 @@ module ThemesForRails
     
     def themes_dir
       @themes_dir ||= ":root/themes"
+    end
+
+    # relative locales directory for theme locales to be separated from assets
+    # used for Asset Pipeline support. Defaults to match {assets_dir}/views
+    def locales_dir
+      @locales_dir ||= ":root/themes/:name/locales"
+    end
+    
+    # Yaml config file for each theme
+    #------------------------------------------------------------------------------
+    def themes_config_file
+      @themes_config_file ||= ":root/themes/:name/_theme.yml"
     end
     
     # Full path to themes
@@ -79,6 +94,20 @@ module ThemesForRails
 
     def asset_digests_enabled?
       @asset_digests_enabled
+    end
+
+    # Load the theme config yaml file located themes_config_file
+    # and stores in the theme_data hash
+    #------------------------------------------------------------------------------
+    def load_theme_data(theme_name)
+      theme_file = interpolate(@themes_config_file, theme_name)
+      if File.exists?(theme_file)
+        data = (YAML::load_file(theme_file))[theme_name]
+      else
+        data = nil
+      end
+      @theme_data[theme_name] = data
+      return data
     end
   end
 end

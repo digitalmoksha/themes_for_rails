@@ -48,19 +48,35 @@ module ThemesForRails
     def add_themes_assets_to_asset_pipeline
       Rails.logger.info "Start adding themes to assets [#{ThemesForRails.config.asset_digests_enabled?}]"
       if ThemesForRails.config.asset_digests_enabled?
-        #--- {todo remove for now, will add the asset paths myself...}
-        # available_theme_names.each do |theme_name|
-        #   theme_asset_path = ThemesForRails.config.assets_dir.gsub(":root", ThemesForRails.config.base_dir).gsub(":name", theme_name.to_s)
-        #   Rails.logger.info "== Adding theme [#{theme_name}] asset dir [#{theme_asset_path}] to asset pipeline"
-        #   Rails.application.config.assets.paths.prepend(theme_asset_path) unless Rails.application.config.assets.paths.include?(theme_asset_path)
-        # end unless ThemesForRails.config.base_dir =~ %r!/app/assets/!
+        available_theme_names.each do |theme_name|
+          theme_asset_path = ThemesForRails.config.assets_dir.gsub(":root", ThemesForRails.config.base_dir).gsub(":name", theme_name.to_s)
+          Rails.logger.info "== Adding theme [#{theme_name}] asset dir [#{theme_asset_path}] to asset pipeline"
+          Rails.application.config.assets.paths.prepend(theme_asset_path) unless Rails.application.config.assets.paths.include?(theme_asset_path)
+        end unless ThemesForRails.config.base_dir =~ %r!/app/assets/!
       end
     end
-
+    
     def already_configured_in_sass?(sass_dir)
       Sass::Plugin.template_location_array.map(&:first).include?(sass_dir)
     end
     
+    #------------------------------------------------------------------------------
+    def load_all_theme_data
+      available_theme_names.each do |theme_name|
+        ThemesForRails.config.load_theme_data(theme_name)
+      end
+    end
+
+    #------------------------------------------------------------------------------
+    def load_locales
+      unless ENV['RAILS_GROUPS'] == 'assets'
+        available_theme_names.each do |theme_name|
+          locale_path = ThemesForRails.config.locales_dir.gsub(":root", ThemesForRails.config.base_dir).gsub(":name", theme_name.to_s)
+          Rails.application.config.i18n.load_path += Dir[File.join(locale_path, '*.{rb,yml}').to_s]
+        end
+      end
+    end
+
   end
 end
 

@@ -12,6 +12,12 @@ module ThemesForRails
       # Adding theme stylesheets path to sass, automatically.
       ThemesForRails.add_themes_path_to_sass if ThemesForRails.config.use_sass?
 
+      # load theme data/config files
+      ThemesForRails.load_all_theme_data
+
+      # load theme locale paths
+      ThemesForRails.load_locales
+
       # Check if asset pipeline enabled
       ThemesForRails.check_asset_pipeline
 

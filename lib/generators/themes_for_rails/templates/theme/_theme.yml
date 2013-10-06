@@ -1,0 +1,21 @@
+# Theme file for Fantastic Sample Theme
+#
+# Way to specify configuration for your theme, such as the name, available
+# templates, and what specific files to add to be precompiled.
+# This file will be loaded automatically and the data will be available at
+#   ThemesForRails.config.theme_data[theme_name]
+#------------------------------------------------------------------------------
+
+theme_name:
+  name: "Fanstastic Sample Theme"
+  templates:
+    index:
+      name: "Front Page - Index"
+      areas: "body"
+    content_with_right_nav:
+      name: "Content (with sidebar on right)"
+      areas: "body, sidebar"
+  precompile:
+    - 'theme_name/stylesheets/application.css'
+    - 'theme_name/stylesheets/stop_ie.css'
+    - 'theme_name/javascripts/html5shiv.js'
