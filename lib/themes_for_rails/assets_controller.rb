@@ -34,9 +34,9 @@ module ThemesForRails
       elsif File.extname(path).blank? || (File.extname(path) != File.extname(request.path_info))
         asset_name = "#{asset_name}.#{extension_from(request.path_info)}"
         return find_themed_asset(asset_name, asset_theme, asset_type, &block)
-      elsif asset_theme != ThemesForRails.config.default_theme
-        #--- last try, check the default theme
-        return find_themed_asset(asset_name, ThemesForRails.config.default_theme, asset_type, &block)
+      elsif asset_theme != ThemesForRails.config.parent_theme(asset_theme)
+        #--- last try, check the parent theme
+        return find_themed_asset(asset_name, ThemesForRails.config.parent_theme(asset_theme), asset_type, &block)
       else
         render_not_found
       end

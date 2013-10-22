@@ -4,14 +4,13 @@ module ThemesForRails
 
     attr_writer :base_dir, :themes_dir, :assets_dir, :views_dir, :themes_routes_dir,
                 :themes_config_file, :locales_dir
-    attr_accessor :use_sass, :default_theme, :asset_digests_enabled, :assets_cache_control,
+    attr_accessor :use_sass, :asset_digests_enabled, :assets_cache_control,
                   :theme_data
     
     include Interpolation
 
     def initialize(&block)
       @use_sass = true
-      @default_theme = 'default'
       @asset_digests_enabled = nil
       @theme_data = {}
       yield if block_given?
@@ -108,6 +107,12 @@ module ThemesForRails
       end
       @theme_data[theme_name] = data
       return data
+    end
+    
+    # Grab the name of the parent theme if it exists
+    #------------------------------------------------------------------------------
+    def parent_theme(theme_name)
+      @theme_data[theme_name]['parent'] if @theme_data[theme_name]
     end
   end
 end

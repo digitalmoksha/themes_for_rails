@@ -117,16 +117,8 @@ module ThemesForRails
 
         should "add the theme's view path to the front of the general view paths" do
           antes = @controller.view_paths.size
-          ThemesForRails.config.default_theme = ''
           @controller.theme 'orange_theme'
           assert_equal antes + 1, @controller.view_paths.size
-        end
-        
-        should "default theme path is added" do
-          antes = @controller.view_paths.size
-          ThemesForRails.config.default_theme = 'default'
-          @controller.theme 'orange_theme'
-          assert_equal antes + 2, @controller.view_paths.size
         end
         
         should "have a proper view path" do
