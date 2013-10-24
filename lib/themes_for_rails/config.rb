@@ -2,8 +2,8 @@
 module ThemesForRails
   class Config
 
-    attr_writer :base_dir, :themes_dir, :assets_dir, :views_dir, :themes_routes_dir,
-                :themes_config_file, :locales_dir
+    attr_writer   :base_dir, :themes_dir, :assets_dir, :views_dir, :themes_routes_dir,
+                  :themes_config_file, :locales_dir
     attr_accessor :use_sass, :asset_digests_enabled, :assets_cache_control,
                   :theme_data
     
@@ -107,6 +107,11 @@ module ThemesForRails
       end
       @theme_data[theme_name] = data
       return data
+    end
+    
+    #------------------------------------------------------------------------------
+    def themes_data(theme_name)
+      @theme_data[theme_name]
     end
     
     # Grab the name of the parent theme if it exists
