@@ -42,17 +42,17 @@ module ThemesForRails
     def add_theme_view_path_for(name)
       #--- first add the parent theme, to handle any view not found in main theme
       if !ThemesForRails.config.parent_theme(name).blank?
-        self.view_paths.insert 0, ::ActionView::FileSystemResolver.new(theme_view_path_for(ThemesForRails.config.parent_theme(name)))
+        self.prepend_view_path(::ActionView::FileSystemResolver.new(theme_view_path_for(ThemesForRails.config.parent_theme(name))))
       end
-      self.view_paths.insert 0, ::ActionView::FileSystemResolver.new(theme_view_path_for(name))
+      self.prepend_view_path(::ActionView::FileSystemResolver.new(theme_view_path_for(name)))
     end
 
     #------------------------------------------------------------------------------
     # At some point, "digest" support was added.  However, at least with Rails 3.2.13
     # the call to asset_paths.digest_for() looks up the digest - when passed to
-    # the stylesheet or javascript helpers, sprockets gives an error saying the 
+    # the stylesheet or javascript helpers, sprockets gives an error saying the
     # asset (which has a digest already appened on it) is not compiled.  So pass
-    # in the straight asset name, and those helpers lookup the digest and give the 
+    # in the straight asset name, and those helpers lookup the digest and give the
     # correct path.
     # The code removed looked like this:
       # if ThemesForRails.config.asset_digests_enabled?
@@ -60,7 +60,7 @@ module ThemesForRails
       # else
       #   asset
       # end
-    
+
     def digest_for_image(asset, theme_context)
       if ThemesForRails.config.asset_digests_enabled?
         expanded_asset = "#{theme_context}/images/#{asset}"
