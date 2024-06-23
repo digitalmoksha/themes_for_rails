@@ -2,10 +2,13 @@ source "http://rubygems.org"
 
 gemspec
 
-#--- because latest mocha needed a patch to make it work that was not in 3.2.12 yet
-gem 'rails', :git => "git://github.com/rails/rails.git", :branch => '3-2-stable'
+gem 'rails', '~> 7.0', '< 7.1'
+
+group :development, :test do
+  gem 'sqlite3', '~> 1.5.2'
+  gem 'pry-byebug'
+end
 
 group :test do
-  gem 'mocha', "~> 0.13.0", :require => false
-  gem 'debugger'
+  gem 'mocha', "~> 2.4.0", :require => false
 end

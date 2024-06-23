@@ -16,9 +16,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = ThemesForRails::VERSION
 
-  gem.add_dependency              'rails', ">= 3.2.0"
-  
-  gem.add_development_dependency  "sqlite3"
-  gem.add_development_dependency  "test-unit"
-  gem.add_development_dependency  "contest"
+  gem.add_dependency 'rails', ">= 7.0"
 end
